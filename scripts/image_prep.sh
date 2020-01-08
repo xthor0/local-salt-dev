@@ -35,7 +35,10 @@ fi
 
 # also make sure we have virt-sysprep
 test -x $(which virt-sysprep)
-if [ $? ]
+if [ $? -ne 0 ]; then
+    echo "Unable to locate virt-sysprep - please install it."
+    exit 255
+fi
 
 # download and prep each image
 for url in ${images[@]}; do 
