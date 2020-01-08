@@ -22,11 +22,11 @@ fi
 # make sure either axel or wget is installed
 test -x $(which axel)
 if [ $? -eq 0 ]; then
-    dlcmd=axel
+    dlcmd="axel -a"
 else
     test -x $(which wget)
     if [ $? -eq 0 ]; then
-        dlcmd=wget
+        dlcmd="wget --progress=dot"
     else
         echo "You need either wget or axel installed. Exiting."
         exit 255
@@ -45,7 +45,7 @@ pushd ${prep_dir}
 # download and prep each image
 for url in ${images[@]}; do 
     echo "Downloading image from ${url}"
-    test -f $(basename ${url}) || ${dlcmd} -q ${url}
+    test -f $(basename ${url}) || ${dlcmd} ${url}
     if [ $? -ne 0 ]; then
         echo "Error downloading from ${url} -- exiting."
         exit 255
