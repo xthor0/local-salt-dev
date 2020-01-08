@@ -39,7 +39,7 @@ if [ $? ]
 
 # download and prep each image
 for url in ${images[@]}; do 
-    echo ${url}
+    echo "Downloading image from ${url}"
     ${dlcmd} -q ${url}
     filename=$(basename ${url})
     case ${filename} in
