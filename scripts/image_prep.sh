@@ -40,10 +40,17 @@ if [ $? -ne 0 ]; then
     exit 255
 fi
 
+pushd ${prep_dir}
+
 # download and prep each image
 for url in ${images[@]}; do 
     echo "Downloading image from ${url}"
     ${dlcmd} -q ${url}
+    if [ $? -ne 0 ]; then
+        echo "Error downloading from ${url} -- exiting."
+        exit 255
+    fi
+
     filename=$(basename ${url})
     case ${filename} in
         *bionic*) nametemplate=bionic;;
