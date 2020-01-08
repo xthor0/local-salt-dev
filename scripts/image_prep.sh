@@ -53,15 +53,17 @@ for url in ${images[@]}; do
     esac
 
     # copy the downloaded image to new images
-    cp ${filename} ${nametemplate}_$(date +%Y%m%d).qcow2
-    cp ${filename} ${nametemplate}_salt_$(date +%Y%m%d).qcow2
+    img_salted=${nametemplate}_salt_$(date +%Y%m%d).qcow2
+    img=${nametemplate}_$(date +%Y%m%d).qcow2
+    cp ${filename} ${img}
+    cp ${filename} ${img_salted}
 
     # virt-sysprep the images
     ## non-salt image
-    virt-sysprep -a ${nametemplate}.qcow2 --network --update --selinux-relabel --touch /etc/cloud/cloud-init.disabled --ssh-inject root --root-password password:toor
+    virt-sysprep -a ${img} --network --update --selinux-relabel --touch /etc/cloud/cloud-init.disabled --ssh-inject root --root-password password:toor
 
     ## salt image
-    virt-sysprep -a ${nametemplate}.qcow2 --network --update --selinux-relabel --touch /etc/cloud/cloud-init.disabled --ssh-inject root --root-password password:toor --install curl --run-command 'curl -L https://bootstrap.saltstack.com -o /tmp/install_salt.sh && bash /tmp/install_salt.sh -P -X'
+    virt-sysprep -a ${img_salted} --network --update --selinux-relabel --touch /etc/cloud/cloud-init.disabled --ssh-inject root --root-password password:toor --install curl --run-command 'curl -L https://bootstrap.saltstack.com -o /tmp/install_salt.sh && bash /tmp/install_salt.sh -P -X'
 
     # these should immediately be usable:
     # virt-install --virt-type=kvm --name ${vmname} --ram ${memory} --vcpus ${cpu} --os-variant=${variant} --network=bridge=virbr0,model=virtio --graphics vnc --disk path=${HDD_IMG},cache=writeback --import --noautoconsole
