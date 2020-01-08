@@ -53,8 +53,8 @@ for url in ${images[@]}; do
     esac
 
     # copy the downloaded image to new images
-    cp ${filename} ${nametemplate}.qcow2
-    cp ${filename} ${nametemplate}_salt.qcow2
+    cp ${filename} ${nametemplate}_$(date +%Y%m%d).qcow2
+    cp ${filename} ${nametemplate}_salt_$(date +%Y%m%d).qcow2
 
     # virt-sysprep the images
     ## non-salt image
