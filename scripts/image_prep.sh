@@ -45,7 +45,7 @@ pushd ${prep_dir}
 # download and prep each image
 for url in ${images[@]}; do 
     echo "Downloading image from ${url}"
-    ${dlcmd} -q ${url}
+    test -f $(filename ${url}) || ${dlcmd} -q ${url}
     if [ $? -ne 0 ]; then
         echo "Error downloading from ${url} -- exiting."
         exit 255
